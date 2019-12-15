@@ -8,17 +8,11 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
 import javax.swing.ImageIcon;
-import javax.swing.JSlider;
 import javax.swing.JComboBox;
 import java.awt.SystemColor;
-import javax.swing.JList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSplitPane;
-import javax.swing.BoxLayout;
-import javax.swing.JSeparator;
-import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 
@@ -191,7 +185,9 @@ public class display {
 		down.setBorderPainted(false);
 		leftPanel.add(down);
 		
-		table = new JTable();
+		Object[] rowName= {"Su","Mo","Tu","We","Th","Fr","Sa"};
+		Object[][] rowData= Cal.Solution();
+		table = new JTable(rowName,rowData);
 		table.setBackground(SystemColor.control);
 		table.setBorder(UIManager.getBorder("Button.border"));
 		table.setBounds(0, 50, 300, 300);
