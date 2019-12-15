@@ -67,11 +67,12 @@ public class display {
 		topPanel.setLayout(null);
 		
 		JButton fold = new JButton("");
-		fold.setIcon(new ImageIcon("C:\\Coding\\Java\\eclipse-workspace\\PIMGUI\\icon\\flod.png"));
+		fold.setIcon(new ImageIcon("icon\\flod.png"));
 		fold.setBounds(0, 0, 50, 50);
 		topPanel.add(fold);
 		fold.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("flod");
 			}
 		});
 		fold.setContentAreaFilled(false);
@@ -80,9 +81,10 @@ public class display {
 		JButton left = new JButton("");
 		left.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("left");
 			}
 		});
-		left.setIcon(new ImageIcon("C:\\Coding\\Java\\eclipse-workspace\\PIMGUI\\icon\\left.png"));
+		left.setIcon(new ImageIcon("icon\\left.png"));
 		left.setBorderPainted(false);
 		left.setContentAreaFilled(false);
 		left.setBackground(SystemColor.control);
@@ -90,17 +92,26 @@ public class display {
 		topPanel.add(left);
 		
 		JButton right = new JButton("");
-		right.setIcon(new ImageIcon("C:\\Coding\\Java\\eclipse-workspace\\PIMGUI\\icon\\right.png"));
+		right.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("right");
+			}
+		});
+		right.setIcon(new ImageIcon("icon\\right.png"));
 		right.setBorderPainted(false);
 		right.setContentAreaFilled(false);
 		right.setBounds(456, 0, 50, 50);
 		topPanel.add(right);
 		
 		JButton today = new JButton("");
-		today.setIcon(new ImageIcon("C:\\Coding\\Java\\eclipse-workspace\\PIMGUI\\icon\\today.png"));
+		today.setIcon(new ImageIcon("icon\\today.png"));
 		today.setContentAreaFilled(false);
 		today.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("today");
 			}
 		});
 		today.setBorderPainted(false);
@@ -110,10 +121,11 @@ public class display {
 		JButton newEvent = new JButton("");
 		newEvent.setBounds(64, 0, 150, 50);
 		topPanel.add(newEvent);
-		newEvent.setIcon(new ImageIcon("C:\\Coding\\Java\\eclipse-workspace\\PIMGUI\\icon\\new event.png"));
+		newEvent.setIcon(new ImageIcon("icon\\new event.png"));
 		newEvent.setContentAreaFilled(false);
 		newEvent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("new event");
 			}
 		});
 		newEvent.setBorderPainted(false);
@@ -152,14 +164,28 @@ public class display {
 		leftPanel.add(comboBox_1);
 		
 		JButton up = new JButton("New button");
-		up.setIcon(new ImageIcon("C:\\Coding\\Java\\eclipse-workspace\\PIMGUI\\icon\\up.png"));
+		up.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("up");
+			}
+		});
+		up.setIcon(new ImageIcon("icon\\up.png"));
 		up.setBounds(200, 0, 50, 50);
 		up.setContentAreaFilled(false);
 		up.setBorderPainted(false);
 		leftPanel.add(up);
 		
 		JButton down = new JButton("New button");
-		down.setIcon(new ImageIcon("C:\\Coding\\Java\\eclipse-workspace\\PIMGUI\\icon\\down.png"));
+		down.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("down");
+			}
+		});
+		down.setIcon(new ImageIcon("icon\\down.png"));
 		down.setBounds(250, 0, 50, 50);
 		down.setContentAreaFilled(false);
 		down.setBorderPainted(false);
