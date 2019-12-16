@@ -13,7 +13,6 @@ public class Cal {
     }
 	
 	public static Object[][] Solution(int m,int y){
-		System.out.println(y+" "+m);
         Calendar c=Calendar.getInstance();
         c.set(y,m-1,1);
         

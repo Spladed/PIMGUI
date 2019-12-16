@@ -7,16 +7,11 @@ import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 import java.awt.SystemColor;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import Style.myTable;
 
@@ -24,11 +19,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.GridLayout;
 
 public class display {
 
 	private JFrame frame;
 	private JTable table;
+	private JPanel tableContainerPanel;
+	private JLabel dateLabel;
+	private JLabel currrentDate;
+	private JPanel rightPanel;
 	
 	private int day;
 	private int month;
@@ -36,6 +36,8 @@ public class display {
 	
 	private Object[] rowName= {"日","一","二","三","四","五","六"};
 	private Object[][] rowData;
+	
+	private int sign;
 
 	/**
 	 * Launch the application.
@@ -61,6 +63,7 @@ public class display {
 		month=initDate.getInitMonth();
 		year=initDate.getInitYear();
 		rowData= Cal.Solution();
+		sign=1;
 		initialize();
 	}
 
@@ -70,59 +73,15 @@ public class display {
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
-		frame.setBounds(100, 100, 1256, 730);
+		frame.setBounds(100, 100, 1050, 780);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel topPanel = new JPanel();
 		topPanel.setBackground(SystemColor.control);
-		topPanel.setBounds(0, 0, 1238, 50);
+		topPanel.setBounds(0, 0, 1032, 50);
 		frame.getContentPane().add(topPanel);
 		topPanel.setLayout(null);
-		
-		//折叠按钮
-		JButton fold = new JButton("");
-		fold.setIcon(new ImageIcon("icon\\flod.png"));
-		fold.setBounds(0, 0, 50, 50);
-		topPanel.add(fold);
-		fold.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("flod");
-			}
-		});
-		fold.setContentAreaFilled(false);
-		fold.setBorderPainted(false);
-		
-		//上个月
-		JButton left = new JButton("");
-		left.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("left");
-			}
-		});
-		left.setIcon(new ImageIcon("icon\\left.png"));
-		left.setBorderPainted(false);
-		left.setContentAreaFilled(false);
-		left.setBackground(SystemColor.control);
-		left.setBounds(392, 0, 50, 50);
-		topPanel.add(left);
-		
-		//下个月
-		JButton right = new JButton("");
-		right.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("right");
-			}
-		});
-		right.setIcon(new ImageIcon("icon\\right.png"));
-		right.setBorderPainted(false);
-		right.setContentAreaFilled(false);
-		right.setBounds(456, 0, 50, 50);
-		topPanel.add(right);
-		
 		
 		
 		//新建事项
@@ -139,46 +98,51 @@ public class display {
 		newEvent.setBorderPainted(false);
 		
 		//当前日期
-		JLabel label = new JLabel("2019年11日");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setFont(new Font("微软雅黑", Font.PLAIN, 22));
-		label.setBounds(516, 0, 200, 50);
-		topPanel.add(label);
+		dateLabel = new JLabel("2019年11日");
+		dateLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		dateLabel.setFont(new Font("微软雅黑", Font.PLAIN, 22));
+		dateLabel.setBounds(516, 0, 200, 50);
+		topPanel.add(dateLabel);
 		
 		JPanel belowPanel = new JPanel();
 		belowPanel.setToolTipText("");
 		belowPanel.setBackground(Color.WHITE);
-		belowPanel.setBounds(0, 50, 1238, 633);
+		belowPanel.setBounds(0, 50, 1032, 683);
 		frame.getContentPane().add(belowPanel);
 		belowPanel.setLayout(null);
 		
 		JSplitPane splitPane = new JSplitPane();
+		splitPane.setOneTouchExpandable(false);
+		splitPane.setDividerSize(1);
 		splitPane.setBackground(SystemColor.window);
-		splitPane.setDividerLocation(300);
+		splitPane.setDividerLocation(308);
 		splitPane.setOneTouchExpandable(true);
-		splitPane.setBounds(0, 0, 1238, 633);
+		splitPane.setBounds(0, 0, 1031, 683);
 		belowPanel.add(splitPane);
 		
-		JPanel rightPanel = new JPanel();
+		rightPanel = new JPanel(null);
+		JPanel bodyPanel=body.bodyPanel(month, year);
+		bodyPanel.setBounds(0, 0, 750, 680);
+		rightPanel.add(bodyPanel);
 		rightPanel.setBackground(SystemColor.window);
 		splitPane.setRightComponent(rightPanel);
-		rightPanel.setLayout(null);
-		
+				
 		JPanel leftPanel = new JPanel();
 		splitPane.setLeftComponent(leftPanel);
 		leftPanel.setLayout(null);
-		
-					
-		JLabel currrentDate = new JLabel(year+"年"+month+"日");
+							
+		currrentDate = new JLabel(year+"年"+month+"月");
 		currrentDate.setFont(new Font("微软雅黑", Font.PLAIN, 22));
 		currrentDate.setHorizontalAlignment(SwingConstants.CENTER);
 		currrentDate.setBounds(0, 0, 200, 50);
 		leftPanel.add(currrentDate);
 		
 		//表格的容器面板
-		JPanel tableContainerPanel = new JPanel();				
+		tableContainerPanel = new JPanel();				
+		tableContainerPanel.setLocation(0, 0);
 		tableContainerPanel.setLayout(null);		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setLocation(0, 0);
 		if(rowData.length==5) {
 			tableContainerPanel.setBounds(0, 50, 300, 239);
 			scrollPane.setBounds(0, 0, 300, 239);
@@ -217,9 +181,8 @@ public class display {
 				JTable newTable = myTable.table(rowData,rowName);
 				newScrollPane.setViewportView(newTable);				
 				tableContainerPanel.add(newScrollPane);	
-				currrentDate.setText(year+"年"+month+"日");
-				label.setText(year+"年"+month+"日");
-				tableContainerPanel.updateUI();
+				currrentDate.setText(year+"年"+month+"月");
+				dateLabel.setText(year+"年"+month+"月");
 			}
 		});
 		today.setBorderPainted(false);
@@ -229,54 +192,86 @@ public class display {
 		
 		//上个月
 		JButton up = new JButton("");
-		up.addActionListener(new ActionListener() {			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				tableContainerPanel.removeAll();
-				if(month==1) {
-					month=12;
-					year-=1;
-				}
-				else 
-					month--;
-				rowData= Cal.Solution(month,year);
-				JScrollPane newScrollPane = new JScrollPane();
-				if(rowData.length==5) {
-					tableContainerPanel.setSize(300, 239);
-					newScrollPane.setBounds(0, 0, 300, 239);
-				}
-				if(rowData.length==6) {
-					tableContainerPanel.setSize(300, 281);
-					newScrollPane.setBounds(0, 0, 300, 281);
-				}
-				JTable newTable = myTable.table(rowData,rowName);
-				newScrollPane.setViewportView(newTable);				
-				tableContainerPanel.add(newScrollPane);	
-				currrentDate.setText(year+"年"+month+"日");
-				label.setText(year+"年"+month+"日");
-				tableContainerPanel.updateUI();
-			}
-		});
+		up.addActionListener(dateChangeAction(0));
 		up.setIcon(new ImageIcon("icon\\up.png"));
 		up.setBounds(200, 0, 50, 50);
 		up.setContentAreaFilled(false);
 		up.setBorderPainted(false);
 		leftPanel.add(up);
 		
+		//上个月
+		JButton left = new JButton("");
+		left.addActionListener(dateChangeAction(0));
+		left.setIcon(new ImageIcon("icon\\left.png"));
+		left.setBorderPainted(false);
+		left.setContentAreaFilled(false);
+		left.setBounds(392, 0, 50, 50);
+		topPanel.add(left);		
+		
 		//下个月
 		JButton down = new JButton("");
-		down.addActionListener(new ActionListener() {			
+		down.addActionListener(dateChangeAction(1));
+		down.setIcon(new ImageIcon("icon\\down.png"));
+		down.setBounds(250, 0, 50, 50);
+		down.setContentAreaFilled(false);
+		down.setBorderPainted(false);
+		leftPanel.add(down);
+						
+		//下个月
+		JButton right = new JButton("");
+		right.addActionListener(dateChangeAction(1));
+		right.setIcon(new ImageIcon("icon\\right.png"));
+		right.setBorderPainted(false);
+		right.setContentAreaFilled(false);
+		right.setBounds(456, 0, 50, 50);
+		topPanel.add(right);
+		
+		//折叠按钮
+		JButton fold = new JButton("");
+		fold.setIcon(new ImageIcon("icon\\flod.png"));
+		fold.setBounds(0, 0, 50, 50);
+		topPanel.add(fold);
+		fold.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(sign==1) {
+					splitPane.setDividerLocation(0);
+					sign=0;
+				}
+				else if(sign==0) {	
+					splitPane.setDividerLocation(300);
+					sign=1;
+				}
+			}
+		});
+		fold.setContentAreaFilled(false);
+		fold.setBorderPainted(false);
+	}
+	
+	//日期更新事假
+	private ActionListener dateChangeAction(int choose) {
+		ActionListener ac=new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				tableContainerPanel.removeAll();
-				if(month==12) {
-					month=1;
-					year+=1;
+				//下个月
+				if(choose==1) {
+					if(month==12) {
+						month=1;
+						year+=1;
+					}
+					else
+						month++;
 				}
-				else
-					month++;
+				//上个月
+				else if(choose==0) {
+					if(month==1) {
+						month=12;
+						year-=1;
+					}
+					else 
+						month--;
+				}
 				rowData= Cal.Solution(month,year);
 				JScrollPane newScrollPane = new JScrollPane();
 				if(rowData.length==5) {
@@ -291,14 +286,14 @@ public class display {
 				newScrollPane.setViewportView(newTable);				
 				tableContainerPanel.add(newScrollPane);	
 				currrentDate.setText(year+"年"+month+"日");
-				label.setText(year+"年"+month+"日");
-				tableContainerPanel.updateUI();
+				dateLabel.setText(year+"年"+month+"日");
+				rightPanel.removeAll();
+				JPanel bodyPanel=body.bodyPanel(month, year);
+				bodyPanel.setBounds(0, 0, 750, 680);
+				rightPanel.add(bodyPanel);
+				rightPanel.updateUI();
 			}
-		});
-		down.setIcon(new ImageIcon("icon\\down.png"));
-		down.setBounds(250, 0, 50, 50);
-		down.setContentAreaFilled(false);
-		down.setBorderPainted(false);
-		leftPanel.add(down);
+		};
+		return ac;
 	}
 }
