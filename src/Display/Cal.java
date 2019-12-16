@@ -13,6 +13,7 @@ public class Cal {
     }
 	
 	public static Object[][] Solution(int m,int y){
+		System.out.println(y+" "+m);
         Calendar c=Calendar.getInstance();
         c.set(y,m-1,1);
         
@@ -55,24 +56,6 @@ public class Cal {
 					break;
 			}
 		}
-		
-				
-		
-//		obj=new Object[6][7];
-//        int count=0;
-//        int week=0;
-//        for(int i=0;i<space-1;i++){
-//            obj[week][i]="";
-//            count++;
-//        }
-//        for(int i=1;i<=num;i++){
-//            if(count==7){
-//                System.out.println();
-//                obj[week][count]=i;
-//                count=0;
-//            }
-//            count++;
-//        }
     }
 	
 	public static void main(String[] args){

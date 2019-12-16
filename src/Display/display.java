@@ -7,6 +7,7 @@ import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -15,11 +16,26 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
+
+import Style.myTable;
+
+import javax.swing.JScrollPane;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import java.awt.Font;
 
 public class display {
 
 	private JFrame frame;
 	private JTable table;
+	
+	private int day;
+	private int month;
+	private int year;
+	
+	private Object[] rowName= {"日","一","二","三","四","五","六"};
+	private Object[][] rowData;
 
 	/**
 	 * Launch the application.
@@ -41,6 +57,10 @@ public class display {
 	 * Create the application.
 	 */
 	public display() {
+		day=initDate.getInitDay();
+		month=initDate.getInitMonth();
+		year=initDate.getInitYear();
+		rowData= Cal.Solution();
 		initialize();
 	}
 
@@ -60,6 +80,7 @@ public class display {
 		frame.getContentPane().add(topPanel);
 		topPanel.setLayout(null);
 		
+		//折叠按钮
 		JButton fold = new JButton("");
 		fold.setIcon(new ImageIcon("icon\\flod.png"));
 		fold.setBounds(0, 0, 50, 50);
@@ -72,6 +93,7 @@ public class display {
 		fold.setContentAreaFilled(false);
 		fold.setBorderPainted(false);
 		
+		//上个月
 		JButton left = new JButton("");
 		left.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -85,6 +107,7 @@ public class display {
 		left.setBounds(392, 0, 50, 50);
 		topPanel.add(left);
 		
+		//下个月
 		JButton right = new JButton("");
 		right.addActionListener(new ActionListener() {
 			
@@ -100,18 +123,9 @@ public class display {
 		right.setBounds(456, 0, 50, 50);
 		topPanel.add(right);
 		
-		JButton today = new JButton("");
-		today.setIcon(new ImageIcon("icon\\today.png"));
-		today.setContentAreaFilled(false);
-		today.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("today");
-			}
-		});
-		today.setBorderPainted(false);
-		today.setBounds(230, 0, 150, 50);
-		topPanel.add(today);
 		
+		
+		//新建事项
 		JButton newEvent = new JButton("");
 		newEvent.setBounds(64, 0, 150, 50);
 		topPanel.add(newEvent);
@@ -124,11 +138,12 @@ public class display {
 		});
 		newEvent.setBorderPainted(false);
 		
-		JComboBox date = new JComboBox();
-		date.setModel(new DefaultComboBoxModel(new String[] {"heiheihei", "hahaha", "666", "777"}));
-		date.setBackground(SystemColor.control);
-		date.setBounds(570, 0, 220, 50);
-		topPanel.add(date);
+		//当前日期
+		JLabel label = new JLabel("2019年11日");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setFont(new Font("微软雅黑", Font.PLAIN, 22));
+		label.setBounds(516, 0, 200, 50);
+		topPanel.add(label);
 		
 		JPanel belowPanel = new JPanel();
 		belowPanel.setToolTipText("");
@@ -153,16 +168,94 @@ public class display {
 		splitPane.setLeftComponent(leftPanel);
 		leftPanel.setLayout(null);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(0, 0, 200, 50);
-		leftPanel.add(comboBox_1);
+					
+		JLabel currrentDate = new JLabel(year+"年"+month+"日");
+		currrentDate.setFont(new Font("微软雅黑", Font.PLAIN, 22));
+		currrentDate.setHorizontalAlignment(SwingConstants.CENTER);
+		currrentDate.setBounds(0, 0, 200, 50);
+		leftPanel.add(currrentDate);
 		
-		JButton up = new JButton("New button");
+		//表格的容器面板
+		JPanel tableContainerPanel = new JPanel();				
+		tableContainerPanel.setLayout(null);		
+		JScrollPane scrollPane = new JScrollPane();
+		if(rowData.length==5) {
+			tableContainerPanel.setBounds(0, 50, 300, 239);
+			scrollPane.setBounds(0, 0, 300, 239);
+		}
+		if(rowData.length==6) {
+			tableContainerPanel.setBounds(0, 50, 300, 281);
+			scrollPane.setBounds(0, 0, 300, 281);
+		}
+		leftPanel.add(tableContainerPanel);
+		tableContainerPanel.add(scrollPane);
+
+		//小日历显示			
+		table = myTable.table(rowData,rowName);
+		scrollPane.setViewportView(table);
+		
+		//今天
+		JButton today = new JButton("");
+		today.setIcon(new ImageIcon("icon\\today.png"));
+		today.setContentAreaFilled(false);
+		today.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				day=initDate.getInitDay();
+				month=initDate.getInitMonth();
+				year=initDate.getInitYear();
+				tableContainerPanel.removeAll();
+				rowData= Cal.Solution(month,year);
+				JScrollPane newScrollPane = new JScrollPane();
+				if(rowData.length==5) {
+					tableContainerPanel.setSize(300, 239);
+					newScrollPane.setBounds(0, 0, 300, 239);
+				}
+				if(rowData.length==6) {
+					tableContainerPanel.setSize(300, 281);
+					newScrollPane.setBounds(0, 0, 300, 281);
+				}
+				JTable newTable = myTable.table(rowData,rowName);
+				newScrollPane.setViewportView(newTable);				
+				tableContainerPanel.add(newScrollPane);	
+				currrentDate.setText(year+"年"+month+"日");
+				label.setText(year+"年"+month+"日");
+				tableContainerPanel.updateUI();
+			}
+		});
+		today.setBorderPainted(false);
+		today.setBounds(230, 0, 150, 50);
+		topPanel.add(today);
+		
+		
+		//上个月
+		JButton up = new JButton("");
 		up.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println("up");
+				tableContainerPanel.removeAll();
+				if(month==1) {
+					month=12;
+					year-=1;
+				}
+				else 
+					month--;
+				rowData= Cal.Solution(month,year);
+				JScrollPane newScrollPane = new JScrollPane();
+				if(rowData.length==5) {
+					tableContainerPanel.setSize(300, 239);
+					newScrollPane.setBounds(0, 0, 300, 239);
+				}
+				if(rowData.length==6) {
+					tableContainerPanel.setSize(300, 281);
+					newScrollPane.setBounds(0, 0, 300, 281);
+				}
+				JTable newTable = myTable.table(rowData,rowName);
+				newScrollPane.setViewportView(newTable);				
+				tableContainerPanel.add(newScrollPane);	
+				currrentDate.setText(year+"年"+month+"日");
+				label.setText(year+"年"+month+"日");
+				tableContainerPanel.updateUI();
 			}
 		});
 		up.setIcon(new ImageIcon("icon\\up.png"));
@@ -171,12 +264,35 @@ public class display {
 		up.setBorderPainted(false);
 		leftPanel.add(up);
 		
-		JButton down = new JButton("New button");
+		//下个月
+		JButton down = new JButton("");
 		down.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println("down");
+				tableContainerPanel.removeAll();
+				if(month==12) {
+					month=1;
+					year+=1;
+				}
+				else
+					month++;
+				rowData= Cal.Solution(month,year);
+				JScrollPane newScrollPane = new JScrollPane();
+				if(rowData.length==5) {
+					tableContainerPanel.setSize(300, 239);
+					newScrollPane.setBounds(0, 0, 300, 239);
+				}
+				if(rowData.length==6) {
+					tableContainerPanel.setSize(300, 281);
+					newScrollPane.setBounds(0, 0, 300, 281);
+				}
+				JTable newTable = myTable.table(rowData,rowName);
+				newScrollPane.setViewportView(newTable);				
+				tableContainerPanel.add(newScrollPane);	
+				currrentDate.setText(year+"年"+month+"日");
+				label.setText(year+"年"+month+"日");
+				tableContainerPanel.updateUI();
 			}
 		});
 		down.setIcon(new ImageIcon("icon\\down.png"));
@@ -184,13 +300,5 @@ public class display {
 		down.setContentAreaFilled(false);
 		down.setBorderPainted(false);
 		leftPanel.add(down);
-		
-		Object[] rowName= {"Su","Mo","Tu","We","Th","Fr","Sa"};
-		Object[][] rowData= Cal.Solution();
-		table = new JTable(rowData,rowName);
-		table.setBackground(SystemColor.control);
-		table.setBorder(UIManager.getBorder("Button.border"));
-		table.setBounds(0, 50, 300, 300);
-		leftPanel.add(table);
 	}
 }
