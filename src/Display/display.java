@@ -187,7 +187,7 @@ public class display {
 		
 		Object[] rowName= {"Su","Mo","Tu","We","Th","Fr","Sa"};
 		Object[][] rowData= Cal.Solution();
-		table = new JTable(rowName,rowData);
+		table = new JTable(rowData,rowName);
 		table.setBackground(SystemColor.control);
 		table.setBorder(UIManager.getBorder("Button.border"));
 		table.setBounds(0, 50, 300, 300);
